@@ -1,4 +1,4 @@
-Simulation for virus: Malaise
+Simulation for virus: hjhjg
 Reproduction Number: 0.2, Mortality Number: 0.99
 Population Size: 16
 Initial Vaccinated: 5

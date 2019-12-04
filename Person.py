@@ -22,10 +22,10 @@ class Person:
         random_num = random.uniform(0,1)
         
         if random_num < self.infection.mortality_num:
-            self.is_alive == False
+            self.is_alive = False
             return False
         else:
-            self.is_vaccinated == True
+            self.is_vaccinated = True
             self.infection = None
             return True
 

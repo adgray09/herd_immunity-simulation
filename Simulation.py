@@ -23,13 +23,12 @@ class Simulation:
 
         self.file_writer = FileWriter(resultsfilename)
 
-
     def create_population(self):
         '''Creates the population (a list of Person objects) consisting of initial infected people, initial healthy non-vaccinated people, and 
         initial healthy vaccinated people. Adds them to the population list'''
 
         for i in range(self.initial_infected):
-        	person = Person(False, virus)
+        	person = Person(False, self.virus)
         	self.population.append(person)
 
         for i in range(self.initial_healthy):
@@ -44,14 +43,20 @@ class Simulation:
         '''Prints out every person in the population and their current attributes'''
         #TODO: finish this method
         for i in range(len(self.population)):
-            print(self.population[i])
+            print(self.population[i].is_alive)
+            print(self.population[i].is_vaccinated)
+            
 
     def get_infected(self):
         '''Gets all the infected people from the population and returns them as a list'''
         #TODO: finish this method
         infected_list = []
-        for infected in self.population:
-            pass
+        for person in self.population:
+            if person.infection != None:
+                infected_list.append(person)
+        return infected_list
+            
+            
             
             
     def simulation_should_continue(self):
@@ -61,12 +66,12 @@ class Simulation:
         If there are no more infected people left and everyone is either vaccinated or dead return False
         In all other cases return True'''
         #TODO: finish this method
-        if self.total_dead == self.population:
+        if self.total_dead == len(self.population):
             return False
         else:
             return True
         
-        if self.total_vaccinated == self.population:
+        if self.total_vaccinated == len(self.population):
             return False
         else:
             return True
@@ -112,15 +117,22 @@ class Simulation:
         if it returns false then the person is no longer alive, does not have an infection and one is added to total dead
         if it returns true then the person no longer has an infection and is vaccinated, one is added to total vaccinated'''
         #TODO: finish this method
-            
+        for person in self.population:
+            if person.did_survive_infection() == False:
+                self.total_dead += 1
+            elif person.did_survive_infection () == True:
+                self.total_vaccinated += 1
+            else:
+                print("ERROR")
 
 
     def time_step(self, infected):
         ''' For every infected person interact with a random person from the population 10 times'''
 
         for infected_person in infected:
-
             for i in range(10):
+                random_per = random.choice(self.population)
+                self.interaction(infected_person, random_per)
                 #TODO: get a random index for the population list
                 #TODO: using the random index get a random person from the population
                 #TODO: call interaction() with the current infected person and the random person
@@ -141,12 +153,14 @@ class Simulation:
             return
         if random_person.is_vaccinated == True:
             return 
-        elif random_person.is_alive == False:
+        if random_person.is_alive == False:
             return 
         if random_person.is_vaccinated == False and random_person.is_alive == True:
             random_chance = random.uniform(0,1)
-            if random_chance < self.virus.repro_rate:
-                random_person 
+            if random_chance < self.virus.reproduction_num:
+                random_person.infection = self.virus 
+            else: 
+                random_person.is_vaccinated = True
                 
             
             
@@ -162,7 +176,7 @@ class Simulation:
 if __name__ == "__main__":
 
     #Set up the initial simulations values
-    virus_name = "Malaise"
+    virus_name = "hjhjg"
     reproduction_num = 0.20
     mortality_num = .99
 
