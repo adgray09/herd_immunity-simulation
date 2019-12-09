@@ -20,7 +20,6 @@ class Person:
         Return True if they survived the infection and False if they did not. 
         '''
         random_num = random.uniform(0,1)
-        
         if random_num < self.infection.mortality_num:
             self.is_alive = False
             return False
@@ -30,4 +29,3 @@ class Person:
             return True
 
         #TODO: finish this method
-        pass

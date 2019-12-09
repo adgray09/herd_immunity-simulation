@@ -68,10 +68,9 @@ class Simulation:
         #TODO: finish this method
         if self.total_dead == len(self.population):
             return False
-        else:
-            return True
-        
-        if self.total_vaccinated == len(self.population):
+        elif self.total_vaccinated == len(self.population):
+            return False
+        elif len(self.get_infected()) == 0:
             return False
         else:
             return True
@@ -117,14 +116,18 @@ class Simulation:
         if it returns false then the person is no longer alive, does not have an infection and one is added to total dead
         if it returns true then the person no longer has an infection and is vaccinated, one is added to total vaccinated'''
         #TODO: finish this method
-        for person in self.population:
+        for person in infected:
             if person.did_survive_infection() == False:
                 self.total_dead += 1
-            elif person.did_survive_infection () == True:
+                person.is_alive = False
+                person.infection = None
+            elif person.did_survive_infection() == True:
+                person.is_alive = True
                 self.total_vaccinated += 1
+                person.infection = None
+                person.is_vaccinated = True
             else:
                 print("ERROR")
-
 
     def time_step(self, infected):
         ''' For every infected person interact with a random person from the population 10 times'''
@@ -161,6 +164,7 @@ class Simulation:
                 random_person.infection = self.virus 
             else: 
                 random_person.is_vaccinated = True
+                self.total_vaccinated += 1
                 
             
             
@@ -187,7 +191,8 @@ if __name__ == "__main__":
 
     virus = Virus(virus_name, reproduction_num, mortality_num)
 
+    
     simulation = Simulation(initial_vaccinated, initial_infected, initial_healthy, virus, "results.txt")
-
+    simulation2 = Simulation(initial_vaccinated, initial_infected, initial_healthy, virus, "results2.txt")
     #run the simulation
     simulation.run()
